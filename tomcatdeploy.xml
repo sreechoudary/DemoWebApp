@@ -1,0 +1,76 @@
+<project name="Rabit" default="war" basedir=".">
+	<property file="tomcatdeploy.properties"/>
+	<property name="src" location="${basedir}/src"/>
+	<property name="webcontent" location="${basedir}/WebContent"/>
+	<property name="lib" location="${webcontent}/WEB-INF/lib"/>
+	<!-- Configure the directory into which the web application is built -->
+	<property name="build" value="${basedir}/build"/>
+	<property name="war" location="${basedir}/war"/>
+	<!-- Configure the context path for this application -->
+	<property name="path" value="/tomcatApp"/>
+	<!-- Configure properties to access the Manager application -->
+	<property name="url" value="${manager.url}"/>
+	<property name="username" value="${manager.username}"/>
+	<property name="password" value="${manager.password}"/>
+
+	<!-- Configure the custom Ant tasks for the Manager application -->
+	<!--taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
+	<taskdef name="list" classname="org.apache.catalina.ant.ListTask"/>
+	<taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask"/>
+	<taskdef name="findleaks" classname="org.apache.catalina.ant.FindLeaksTask"/>
+	<taskdef name="resources" classname="org.apache.catalina.ant.ResourcesTask"/>
+	<taskdef name="start" classname="org.apache.catalina.ant.StartTask"/>
+	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask"/>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/-->
+
+	<path id="libpath">
+		<fileset dir="lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<taskdef resource="org/apache/catalina/ant/catalina.tasks" classpathref="libpath"/>
+
+	<target name="clean" description="Deleting build and war directories">
+		<delete dir="${build}"/>
+		<delete dir="${war}"/>
+	</target>
+
+	<target name="init" depends="clean" description="Creating build and war directories">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${war}"/>
+	</target>
+
+	<target name="compile" depends="init" description="Compile web application">
+		<copy todir="${build}/">
+			<fileset dir="${webcontent}"/>
+		</copy>
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}/WEB-INF/classes" classpathref="libpath" includeantruntime="true"/>
+	</target>
+
+	<target name="war" depends="compile" description="generate the distribution war" >
+		<jar jarfile="${war}${path}.war" basedir="${build}"/>
+	</target>
+
+	<target name="deploy" description="Install web application">
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="file:${war}${path}.war" update="true"/>
+	</target>
+	
+	<target name="stop" description="Reload web application">
+		<stop  url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+	
+	<target name="start" description="Reload web application">
+		<start  url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+	
+	<target name="undeploy" description="Remove web application">
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+
+	<target name="reload" description="Reload web application">
+		<reload  url="${url}" username="${username}" password="${password}" path="${path}"/>
+	</target>
+
+</project>
