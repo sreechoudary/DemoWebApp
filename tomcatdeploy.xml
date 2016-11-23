@@ -23,13 +23,13 @@
 	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask"/>
 	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/-->
 
-	<!--path id="libpath">
+	<path id="libpath">
 		<fileset dir="lib">
 			<include name="*.jar"/>
 		</fileset>
 	</path>
 	
-	<taskdef resource="org/apache/catalina/ant/catalina.tasks" classpathref="libpath"/-->
+	<taskdef resource="org/apache/catalina/ant/catalina.tasks" classpathref="libpath"/>
 
 	<target name="clean" description="Deleting build and war directories">
 		<delete dir="${build}"/>
