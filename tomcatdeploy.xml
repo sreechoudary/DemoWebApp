@@ -38,7 +38,7 @@
 
 	<target name="init" depends="clean" description="Creating build and war directories">
 		<mkdir dir="${build}"/>
-		<delete dir="${build}/WEB-INF/classes"/>
+		<mkdir dir="${build}/WEB-INF/classes"/>
 		<mkdir dir="${war}"/>
 	</target>
 
