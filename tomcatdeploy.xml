@@ -52,6 +52,7 @@
 
 	<target name="war" depends="compile" description="generate the distribution war" >
 		<jar jarfile="${war}${path}.war" basedir="${build}"/>
+		<copy file="${war}${path}.war" todir="${basedir}/docker"/>
 	</target>
 
 	<target name="deploy" description="Install web application">
